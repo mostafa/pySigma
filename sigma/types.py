@@ -43,6 +43,15 @@ class Placeholder:
 
     name: str
 
+    def __hash__(self):
+        return hash(self.name)
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return f"Placeholder(name='{self.name}')"
+
 
 escape_char = "\\"
 char_mapping = {
@@ -347,7 +356,10 @@ class SigmaString(SigmaType):
             )
 
     def __str__(self) -> str:
-        return "".join(s if isinstance(s, str) else special_char_mapping[s] for s in self.s)
+        return "".join(
+            s if isinstance(s, str) else special_char_mapping.get(s, "NO_VALUE_PROVIDED")
+            for s in self.s
+        )
 
     def __repr__(self) -> str:
         return str(self.s)
