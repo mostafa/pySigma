@@ -347,7 +347,15 @@ class SigmaString(SigmaType):
             )
 
     def __str__(self) -> str:
-        return "".join(s if isinstance(s, str) else special_char_mapping[s] for s in self.s)
+        result = ""
+        for s in self.s:
+            try:
+                result += s if isinstance(s, str) else special_char_mapping[s]
+            except TypeError:
+                # Return an empty string if the placeholder
+                # has no transformer and cannot be replaced.
+                result += "NO_VALUE_PROVIDED"
+        return result
 
     def __repr__(self) -> str:
         return str(self.s)
